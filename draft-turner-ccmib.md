@@ -4147,7 +4147,7 @@ This MIB module makes reference to the following documents: {{RFC2571}}, {{RFC25
         DEFVAL {0}
         ::= { cKeyTransferPullScalars 3 }
     
-    cCDMLDeliveryRequest OBJECT-TYPE
+    PALDeliveryRequest OBJECT-TYPE
         SYNTAX      INTEGER { readyForDownload(1), downloadAndParse(2),
                               discard(3) }
         MAX-ACCESS  read-write
@@ -4160,39 +4160,39 @@ This MIB module makes reference to the following documents: {{RFC2571}}, {{RFC25
             will return the last requested action.
 
             The values which may be set depend on the current value of
-            this object and the cCDMLDeliveryStatus object.
+            this object and the PALDeliveryStatus object.
 
             In order to initiate a new download, this object must
             contain the value 'readyForDownload', and the
-            cCDMLDeliveryStatus must contain the value 'complete'. At
+            PALDeliveryStatus must contain the value 'complete'. At
             which point, setting this object to to 'downloadAndParse'
             initiates the CDML download process. Note, the
-            cCDMLDeliveryStatus should transition to 'inProgress' at
+            PALDeliveryStatus should transition to 'inProgress' at
             the device begins the CDML download process from the
-            server(s) and URI(s) listed in the cCDMLServerTable (as
-            ordered by the cCDMLServerPriority index).
+            server(s) and URI(s) listed in the PALServerTable (as
+            ordered by the PALServerPriority index).
 
             If the CDML download fails, the next highest priority URI
             will be tried, and so on.
 
             While a CDML download is in progress, or if the CDML
             download fails for all possible servers and URIs (indicated
-            by a cCDMLDeliveryStatus value of 'downloadFailed'), this
+            by a PALDeliveryStatus value of 'downloadFailed'), this
             object will return an inconsistentValue error for any new
             value except 'discard' (which will cancel the current
             download).
 
-            If the CDML download succeeded, the cCDMLDeliveryStatusvalue
+            If the CDML download succeeded, the PALDeliveryStatusvalue
             remains inProgress and the device attempts to parse the
             download immediately. During the parsing of the CDML, all
             new values will return inconsistentValue error (i.e. the
             parse process can not be aborted). If the parse fails, the
-            cCDMLDeliveryStatus will transition to 'parseFailed', and
+            PALDeliveryStatus will transition to 'parseFailed', and
             this object must be set to 'discard' before a new CDML
             download is attempted."
         ::= { cKeyTransferPullScalars 4 }
     
-    cCDMLDeliveryStatus OBJECT-TYPE
+    PALDeliveryStatus OBJECT-TYPE
         SYNTAX      INTEGER { complete(1), inProgress(2),
                               downloadFailed(3),
                               parseFailed(4) }
@@ -4202,7 +4202,7 @@ This MIB module makes reference to the following documents: {{RFC2571}}, {{RFC25
             "This indicates the current state of a CDML download.
     
             'complete' indicates that the last requested
-            cCDMLDeliveryRequest action was successful.
+            PALDeliveryRequest action was successful.
     
             'inProgress' indicates that a CDML download or CDML parse is
             underway.
@@ -4214,12 +4214,12 @@ This MIB module makes reference to the following documents: {{RFC2571}}, {{RFC25
             failed.
 
             The relationship between this object and
-            cCDMLDeliveryRequest is detailed in the following table. The
-            table indicates values of cCDMLDeliveryRequest that are
+            PALDeliveryRequest is detailed in the following table. The
+            table indicates values of PALDeliveryRequest that are
             allowed depending on the current value of this object.
     
 
- cCDMLDeliveryRequest!                 cCDMLDeliveryStatus
+ PALDeliveryRequest!                 PALDeliveryStatus
  --------------------+-----------+----------+--------------+------------
  !                   !  complete !inProgress!downloadFailed!parseFailed!
  --------------------+-----------+----------+--------------+------------
@@ -4230,7 +4230,7 @@ This MIB module makes reference to the following documents: {{RFC2571}}, {{RFC25
  ! discard           !   error   ! allowed  !   allowed    !  allowed  !
  --------------------+-----------+----------+--------------+------------
     
-            As described cCDMLDeliveryRequest description, an
+            As described PALDeliveryRequest description, an
             inconsistentValue error is returned."
         DEFVAL {complete}
         ::= { cKeyTransferPullScalars 5 }
@@ -4239,7 +4239,7 @@ This MIB module makes reference to the following documents: {{RFC2571}}, {{RFC25
     -- Key Transfer Pull Notifications
     -- *****************************************************************
 
-    cCDMLPullReceiveSuccess  NOTIFICATION-TYPE
+    PALPullReceiveSuccess  NOTIFICATION-TYPE
         OBJECTS     { cCDMServerURI }
         STATUS      current
         DESCRIPTION
@@ -4248,10 +4248,10 @@ This MIB module makes reference to the following documents: {{RFC2571}}, {{RFC25
             this notification."
         ::= { cKeyTransferPullNotify 1 }
 
-    cCDMLPullReceiveFailed  NOTIFICATION-TYPE
+    PALPullReceiveFailed  NOTIFICATION-TYPE
         OBJECTS     {
                         cCDMServerURI,
-                        cCDMLDeliveryStatus
+                        PALDeliveryStatus
                     }
         STATUS      current
         DESCRIPTION
